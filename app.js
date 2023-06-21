@@ -6,6 +6,14 @@ const path = require('path');
 
 require('dotenv').config();
 
+
+const { sequelize } = require('./db');
+
+sequelize.authenticate()
+    .then(() => console.log('Conexión a base de datos exitosa'))
+    .catch((error) => console.log('Error al conectar a base de datos', error));
+
+
 const app = express();
 
 
