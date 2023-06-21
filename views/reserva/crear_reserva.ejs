@@ -1,0 +1,105 @@
+<%- include('../partials/header') %>
+
+    <div class="container mt-5">
+        <div class="row">
+
+            <div class="row mb-2">
+                <div class="col-md-5">
+                    <a href="/api/reserva" id="btnRegresar" class="btn btn-sm btn-primary">Regresar</a>
+                    <a href="/api" class="btn btn-sm btn-info text-light">Inicio</a>
+                </div>
+            </div>
+
+            <div class="mx-auto col-sm-9 col-md-6 col-lg-5 col-xl-4">
+                <form action="#" id="formNuevaReserva" class="rounded border p-3" method="post">
+                    <h3 class="mb-3 text-center bg-primary text-light rounded p-2">Nueva Reserva</h3>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="nombre" name="nombre">
+                        <label class="form-label">Nombre</label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="apellido" name="apellido">
+                        <label class="form-label">Apellido</label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="email" class="form-control" id="email" name="email">
+                        <label class="form-label">Correo Electronico</label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="number" class="form-control" id="telefono" name="telefono">
+                        <label class="form-label">Telefono</label>
+                    </div>
+                    <div class="mb-3">
+                        <input type="date" class="form-control" id="fecha" name="fecha">
+                        <label class="form-label">Que fecha desea realizar la reserva</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+
+        const formNuevaTarea = document.querySelector('#formNuevaReserva');
+
+
+        formNuevaTarea.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+
+            const nombre = document.querySelector('#nombre').value;
+            const apellido = document.querySelector('#apellido').value;
+            const email = document.querySelector('#email').value;
+            const telefono = document.querySelector('#telefono').value;
+            const fecha = document.querySelector('#fecha').value;
+
+
+            const nuevaReserva = {
+                nombre,
+                apellido,
+                email,
+                telefono,
+                fecha
+            }
+
+
+            try {
+
+                const res = await fetch('http://localhost:4000/reserva/crear', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': localStorage.getItem('token')
+                    },
+
+                    body: JSON.stringify(nuevaReserva)
+                });
+
+                const data = await res.json();
+                console.log({ data });
+                formNuevaReserva.reset();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Reserva creada',
+                    text: 'La reserva se ha creado correctamente'
+                })
+
+                setTimeout(() => {
+                    window.location.href = '/api/reserva';
+                }, 2000);
+            } catch (error) {
+                console.log(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: error.message
+                })
+            }
+        })
+    </script>
+
+    <%- include('../partials/footer') %>

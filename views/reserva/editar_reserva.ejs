@@ -1,0 +1,119 @@
+<%- include('../partials/header') %>
+    <div class="container">
+        <div class="row mt-5">
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <a href="/api/reserva" class="btn btn-sm btn-primary">Regresar</a>
+                    <a href="/api" class="btn btn-sm btn-info text-light">Inicio</a>
+                </div>
+            </div>
+            <div class="mx-auto col-sm-9 col-md-6 col-lg-5 col-xl-4">
+                <form id="formEditar" class="w-100 border rounded p-3" action="#" data-id="<%= id  %>">
+                    <h2 class="text-center">Editar Tarea</h2>
+                    <hr>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Nombre</label>
+                        <input type="text" value="" id="nombre" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Apellido</label>
+                        <input type="text" value="" id="apellido" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Telefono</label>
+                        <input type="text" value="" id="telefono" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">Correo Electronico</label>
+                        <input type="text" value="" id="email" class="form-control" id="exampleFormControlInput1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleFormControlInput1" class="form-label">fecha</label>
+                        <input type="text" value="" id="fecha" class="form-control" id="exampleFormControlInput1">
+                    </div>
+
+                    <button type="submit" class="btn btn-warning w-100">
+                        Editar
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+
+        const formEditar = document.querySelector('#formEditar');
+        const nombre = document.querySelector('#nombre');
+        const apellido = document.querySelector('#apellido');
+        const telefono = document.querySelector('#telefono');
+        const email = document.querySelector('#email');
+        const fecha = document.querySelector('#descripcion');
+
+        const reservaId = formEditar.dataset.id;
+
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const response = await fetch(`http://localhost:4000/api/reserva/${reservaId}`)
+            const data = await response.json();
+
+            nombre.value = data.nombre;
+            apellido.value = data.apellido;
+            telefono.value = data.telefono;
+            email.value = data.email;
+            fecha.value = data.fecha;
+        })
+
+
+
+        formEditar.addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+
+            const formData = {
+                nombre: e.target.nombre.value,
+                apellido: e.target.apellido.value,
+                telefono: e.target.telefono.value,
+                email: e.target.email.value,
+                fecha: e.target.titulo.value,
+            }
+
+            try {
+                const resp = await fetch(`http://localhost:4000/api/reserva/${tareaId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                })
+
+                if (resp.status !== 200) {
+                    throw ({
+                        message: 'Error al editar la reserva'
+                    })
+                }
+
+                const data = await resp.json();
+
+                Swal.fire({
+                    icon: 'success',
+                    title: data.message,
+                    showConfirmButton: false,
+                    timer: 1500
+                })
+                setTimeout(() => {
+                    window.location.href = '/reserva';
+                }, 1500);
+
+            } catch (error) {
+                Swal.fire({
+                    icon: 'error',
+                    title: error.message,
+                    timer: 2000,
+                })
+            }
+        });
+    </script>
+
+
+    <%- include('../partials/footer') %>

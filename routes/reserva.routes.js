@@ -21,7 +21,7 @@ router.get('/', (req, res) => {
 
 // Obtener todas las reservas
 
-router.get('/reservas', (req, res) => {
+router.get('/reserva', (req, res) => {
     res.render('reserva/index');
 });
 
