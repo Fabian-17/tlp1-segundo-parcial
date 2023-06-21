@@ -7,7 +7,7 @@ const path = require('path');
 require('dotenv').config();
 
 
-const { sequelize } = require('./db');
+const { sequelize } = require('./database');
 
 sequelize.authenticate()
     .then(() => console.log('Conexión a base de datos exitosa'))
