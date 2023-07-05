@@ -14,16 +14,12 @@ const {
 //         Rutas para renderizar vistas
 // ==========================================
 
+
+// Obtener todas las reservas
 router.get('/', (req, res) => {
     res.render('index');
 });
 
-
-// Obtener todas las reservas
-
-router.get('/reserva', (req, res) => {
-    res.render('reserva/index');
-});
 
 // Formulario para crear una reserva
 
@@ -44,10 +40,12 @@ router.get('/reserva/editar/:id', (req, res) => {
 // ==========================================
 
 // Obtener todas las reservas
-router.get('/api/', obtenerReservas);
+router.get('/api', obtenerReservas);
  
 // Crear una reserva
-router.post('/api/', crearReserva);
+router.post('/api', crearReserva);
+
+router.get('/api/:id', obtenerReserva);
  
 // Actualizar una reserva
 router.put('/api/:id', actualizarReserva);

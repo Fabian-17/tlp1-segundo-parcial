@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 21-06-2023 a las 21:51:57
+-- Tiempo de generación: 02-07-2023 a las 17:39:36
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
 
@@ -31,7 +31,6 @@ CREATE TABLE `reservas` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL,
   `apellido` varchar(255) NOT NULL,
-  `usuarioId` int(11) NOT NULL,
   `email` varchar(255) NOT NULL,
   `telefono` int(11) NOT NULL,
   `fecha` datetime NOT NULL,

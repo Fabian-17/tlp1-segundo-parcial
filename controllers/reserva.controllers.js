@@ -11,23 +11,16 @@ ctrlReservas.obtenerReservas = async (req, res) => {
     try {
         const reservas = await Reserva.findAll({
             where: {
-                estado: true,
-                usuarioId: req.usuario.id
+                estado: true
             }
         });
 
-        if (!reservas || reservas.length === 0) {
-            throw ({
-                status: 404,
-                message: 'No hay reservas registradas'
-            })
-        }
-
         return res.json(reservas);
     } catch (error) {
-        return res.status(error.status || 500).json({
-            message: error.message || 'Error interno del servidor'
-        });
+        console.log('Error al obtener las reservas', error);
+        return res.status(500).json({
+            message: 'Error al obtener las reservas'
+        })
     }
 }
 
@@ -61,7 +54,7 @@ ctrlReservas.obtenerReserva = async (req, res) => {
 // Crear una reserva
 
 ctrlReservas.crearReserva = async (req, res) => {
-    const { nombre, apellido, email, fecha } = req.body;
+    const { nombre, apellido, email, fecha, telefono } = req.body;
 
     try {
         const reserva = await Reserva.create({
@@ -69,7 +62,7 @@ ctrlReservas.crearReserva = async (req, res) => {
             apellido,
             email,
             fecha,
-            usuarioId: req.usuario.id
+            telefono
         });
 
         if (!reserva) {
@@ -90,14 +83,15 @@ ctrlReservas.crearReserva = async (req, res) => {
 
 ctrlReservas.actualizarReserva = async (req, res) => {
     const { id } = req.params;
-    const { nombre, apellido, email, fecha } = req.body;
+    const { nombre, apellido, email, fecha, telefono } = req.body;
     
     try {
         const reservaActualizada = await Reserva.update({
             nombre,
             apellido,
             email,
-            fecha
+            fecha,
+            telefono
         }, {
             where: {
                 id,
@@ -144,7 +138,10 @@ ctrlReservas.eliminarReserva = async (req, res) => {
             })
         }
 
-        return res.json({reservaEliminada, message: 'Reserva eliminada correctamente' });
+         return res.json({
+         message: 'Reserva eliminada correctamente',
+         reservaEliminada
+     });
     } catch (error) {
         return res.status(error.status || 500).json(error.message || 'Error interno del servidor');
     }

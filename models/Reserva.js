@@ -4,16 +4,17 @@ const { sequelize, DataTypes } = require('../database');
 
 const reserva = sequelize.define('reserva', {
 
+    id: {
+        type: DataTypes.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
     nombre: {
         type: DataTypes.STRING,
         allowNull: false
     },
     apellido: {
         type: DataTypes.STRING,
-        allowNull: false
-    },
-    usuarioId: {
-        type: DataTypes.INTEGER,
         allowNull: false
     },
     email: {
@@ -27,6 +28,10 @@ const reserva = sequelize.define('reserva', {
     fecha: {
         type: DataTypes.DATE,
         allowNull: false,
+    },
+    estado: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: true
     },
     createdAt: {
         type: DataTypes.DATE,

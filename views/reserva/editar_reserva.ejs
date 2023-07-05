@@ -4,8 +4,8 @@
 
             <div class="row">
                 <div class="col-md-4 mb-3">
-                    <a href="/api/reserva" class="btn btn-sm btn-primary">Regresar</a>
-                    <a href="/api" class="btn btn-sm btn-info text-light">Inicio</a>
+                    <a href="/" class="btn btn-sm btn-primary">Regresar</a>
+                    <a href="/" class="btn btn-sm btn-info text-light">Inicio</a>
                 </div>
             </div>
             <div class="mx-auto col-sm-9 col-md-6 col-lg-5 col-xl-4">
@@ -22,15 +22,15 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Telefono</label>
-                        <input type="text" value="" id="telefono" class="form-control" id="exampleFormControlInput1">
+                        <input type="number" id="telefono" class="form-control">
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">Correo Electronico</label>
-                        <input type="text" value="" id="email" class="form-control" id="exampleFormControlInput1">
+                        <input type="email" value="" id="email" class="form-control" id="exampleFormControlInput1">
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">fecha</label>
-                        <input type="text" value="" id="fecha" class="form-control" id="exampleFormControlInput1">
+                        <input type="date" value="" id="fecha" class="form-control" id="exampleFormControlInput1">
                     </div>
 
                     <button type="submit" class="btn btn-warning w-100">
@@ -48,20 +48,20 @@
         const apellido = document.querySelector('#apellido');
         const telefono = document.querySelector('#telefono');
         const email = document.querySelector('#email');
-        const fecha = document.querySelector('#descripcion');
+        const fecha = document.querySelector('#fecha');
 
         const reservaId = formEditar.dataset.id;
 
 
         document.addEventListener('DOMContentLoaded', async () => {
-            const response = await fetch(`http://localhost:4000/api/reserva/${reservaId}`)
+            const response = await fetch(`http://localhost:4000/api/${reservaId}`)
             const data = await response.json();
 
             nombre.value = data.nombre;
             apellido.value = data.apellido;
             telefono.value = data.telefono;
             email.value = data.email;
-            fecha.value = data.fecha;
+            fecha.value = dayjs(data.fecha).format('DD-MM-YYYY');
         })
 
 
@@ -75,11 +75,11 @@
                 apellido: e.target.apellido.value,
                 telefono: e.target.telefono.value,
                 email: e.target.email.value,
-                fecha: e.target.titulo.value,
+                fecha: e.target.fecha.value,
             }
 
             try {
-                const resp = await fetch(`http://localhost:4000/api/reserva/${tareaId}`, {
+                const resp = await fetch(`http://localhost:4000/api/${reservaId}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json'
@@ -102,7 +102,7 @@
                     timer: 1500
                 })
                 setTimeout(() => {
-                    window.location.href = '/reserva';
+                    window.location.href = '/';
                 }, 1500);
 
             } catch (error) {

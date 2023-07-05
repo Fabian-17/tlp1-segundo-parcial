@@ -1,96 +1,61 @@
-const listadoReservas = document.querySelector('#listadoReservas');
-
-const obtenerReservas = async () => {
-    const res = await fetch('http://localhost:4000/api/reserva', {
-        headers: {
-            'Authorization': localStorage.getItem('token')
-        }
+const obtenerDatos = async () => {
+    // Pedir las reservas al servidor
+    const data = await fetch('http://localhost:4000/api', {
+        method: 'GET'
     });
-
-    if(res.status === 404 ) {
-        return [];
-    }
-
-    const data = await res.json();
-    return data;
+    const reservas = await data.json();
+    return reservas;
 }
 
-const eliminarReserva = async (event) => {
-    const id = event.target.dataset.id;
 
-    try {
-        const res = await fetch(`http://localhost:4000/api/reserva/${id}`, {
-            method: 'DELETE'
-        });
+const mostrarReservas = (reservas, tablaElement) => {
+let registros = '';
+reservas.forEach(reserva => {
+    registros += `
+        <tr>
+            <td>${reserva.nombre}</td>
+            <td>${reserva.apellido}</td>
+            <td>${dayjs(reserva.fecha).format('DD-MM-YYYY')}</td>
+            <td>${reserva.email}</td>
+            <td>${reserva.telefono}</td>
+            <td>
+           <div class="row">
+           <a href="/reserva/editar/${reserva.id}" class="btn btn-sm btn-warning">Editar</a>
+           <button class="btn btn-danger btn-sm" data-id="${reserva.id}" onClick=eliminarReserva(event)>Eliminar</button>
+           </div>
+            </td>
+        </tr>
+    `
+})
 
-        const data = await res.json();
-
-        console.log(data);
-
-        Swal.fire({
-            icon: 'success',
-            title: 'Reserva eliminada',
-            text: data.message,
-        });
-        
-        setTimeout(() => {
-            window.location.reload();
-        }, 2200);
-
-    } catch (error) {
-        console.log(error);
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.message,
-        })
-    }
+tablaElement.innerHTML = registros;
 
 }
 
-const mostrarReservas = (reservas) => {
+
+const eliminarReserva = async (e) => {
+
+console.log(e)
+const id = e.target.dataset.id;
 
 
-    if(reservas.length === 0){
-        listadoreservas.innerHTML = `
-            <tr>
-                <td colspan="3" class="text-center">No hay reservas registradas</td>
-            </tr>
-        `;
-        return;
-    };
+const response = await fetch(`/api/${id}`,{
+    method: 'DELETE',
+})
 
-    reservas.forEach(reserva => {
-        listadoreservas.innerHTML += `
-                    <tr>
-                        <td>${reserva.titulo}</td>
-                        <td>${reserva.descripcion}</td>
-                        <td>
-                            <button onclick=eliminarreserva(event) class="btn btn-danger btn-sm" data-id="${reserva.id}">Eliminar</button>
-                            <a href="/reserva/editar/${reserva.id}" class="btn btn-warning btn-sm">Editar</a>
-                        </td>
-                    </tr>
-                `;
-    });
+const data = await response.json();
+
+alert(data.message);
+
+window.location.href = "/"
+
 }
 
 
 document.addEventListener('DOMContentLoaded', async () => {
+// Mostrar las reservas en la tabla
+const tbody = document.querySelector('#listadoReservas');
+const reservas = await obtenerDatos() // undefined si no obtenerDatos no retorna nada
+mostrarReservas(reservas, tbody)
 
-    console.log('DOM cargado')
-
-
-    try {
-        const reservas = await obtenerReservas();     
-        mostrarReservas(reservas);
-    } catch (error) {  
-        console.log({ error });
-
-
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: error.message,
-        });
-    }
 });
