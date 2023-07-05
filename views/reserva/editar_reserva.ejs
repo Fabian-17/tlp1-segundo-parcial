@@ -30,7 +30,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="exampleFormControlInput1" class="form-label">fecha</label>
-                        <input type="date" value="" id="fecha" class="form-control" id="exampleFormControlInput1">
+                        <input type="datetime-local" value="" id="fecha" class="form-control" id="exampleFormControlInput1">
                     </div>
 
                     <button type="submit" class="btn btn-warning w-100">
@@ -61,7 +61,7 @@
             apellido.value = data.apellido;
             telefono.value = data.telefono;
             email.value = data.email;
-            fecha.value = dayjs(data.fecha).format('DD-MM-YYYY');
+            fecha.value = dayjs(data.fecha).format('YYYY-MM-DD HH:mm');
         })
 
 
